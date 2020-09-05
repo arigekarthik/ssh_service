@@ -7,8 +7,14 @@ CORS(app)
 
 @app.route('/list_dir', methods=['GET'])
 def list_remote_dir():
+    sftp_conn = create_sftp_connection()
+    directory_structure = sftp_conn.listdir_attr()
+    dir_contents = []
+    for attr in directory_structure:
+        dir_contents.append([attr.filename, attr])
+    sftp_conn.close()
     response = app.response_class(
-        response=json.dumps(connect_and_list()),
+        response=json.dumps(str(dir_contents)),
         status=200,
         mimetype='application/json'
     )
