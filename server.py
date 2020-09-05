@@ -27,6 +27,7 @@ def upload_to_remote():
     sftp_conn = create_sftp_connection()
     localFilePath = f"./{f.filename}"
     remoteFilePath = f"./{f.filename}"
+    print(os.listdir('.'), localFilePath, remoteFilePath)
     sftp_conn.put(localFilePath, remoteFilePath)
     sftp_conn.close()
     response = app.response_class(
@@ -43,20 +44,6 @@ def create_sftp_connection():
     cnopts = pysftp.CnOpts()
     cnopts.hostkeys = None
     return pysftp.Connection(host=myHostname, username=myUsername, password=myPassword, cnopts=cnopts)
-
-def connect_and_list():
-    myHostname = "test.rebex.net"
-    myUsername = "demo"
-    myPassword = "password"
-    cnopts = pysftp.CnOpts()
-    cnopts.hostkeys = None
-    dir_contents = []
-    with pysftp.Connection(host=myHostname, username=myUsername, password=myPassword, cnopts=cnopts) as sftp:
-        print("Connection succesfully stablished ... ")
-        directory_structure = sftp.listdir_attr()
-        for attr in directory_structure:
-            dir_contents.append([attr.filename, attr])
-    return str(dir_contents)
 
 if __name__ == '__main__':
     app.run(port=5000)
