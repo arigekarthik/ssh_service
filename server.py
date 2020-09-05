@@ -37,6 +37,26 @@ def upload_to_remote():
     )
     return response
 
+@app.route('/upload_from_string', methods = ['POST'])
+def upload_to_remote():
+    body = request.get_json()
+    with open("sftp_out.txt", "w") as text_file:
+        text_file.write(body['file'])
+    sftp_conn = create_sftp_connection()
+    localFilePath = f"./sftp_out.txt"
+    remoteFilePath = f"sftp_out.txt"
+    print(os.listdir('.'), localFilePath, remoteFilePath)
+    sftp_conn.put(localFilePath, remoteFilePath)
+    sftp_conn.close()
+    os.remove("sftp_out.txt")
+    print(os.listdir('.'))
+    response = app.response_class(
+        response=json.dumps({}),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
+
 def create_sftp_connection():
     myHostname = "test.rebex.net"
     myUsername = "demo"
