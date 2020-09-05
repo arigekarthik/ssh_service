@@ -22,19 +22,14 @@ CORS(app)
 
 @app.route('/upload', methods = ['POST'])
 def upload_to_remote():
-    print("hit route ", request.form, request.args, request.files)
     f = request.files['file']
     f.save(f.filename)
-    file = open(f.filename, "r")
-    for x in file:
-        print(x)
     sftp_conn = create_sftp_connection()
-    localFilePath = f"./{f.filename}"
-    remoteFilePath = f"./{f.filename}"
-    print(os.listdir('.'), localFilePath, remoteFilePath)
+    localFilePath = f"{f.filename}"
+    remoteFilePath = f"{f.filename}"
     sftp_conn.put(localFilePath, remoteFilePath)
     sftp_conn.close()
-    # os.remove(f.filename)
+    os.remove(f.filename)
     response = app.response_class(
         response=json.dumps({}),
         status=200,
