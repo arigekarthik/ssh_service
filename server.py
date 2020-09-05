@@ -1,4 +1,5 @@
 import pysftp
+import os
 from flask import Flask, request, json
 from flask_cors import CORS
 app = Flask(__name__)
@@ -16,7 +17,9 @@ def list_remote_dir():
 @app.route('/upload', methods = ['POST'])
 def upload_to_remote():
     f = request.files['file']
-    print(f)
+    f.save(f.filename)
+    arr = os.listdir('.')
+    print(arr)
     response = app.response_class(
         response=json.dumps({}),
         status=200,
@@ -33,6 +36,7 @@ def connect_and_list():
     dir_contents = []
     with pysftp.Connection(host=myHostname, username=myUsername, password=myPassword, cnopts=cnopts) as sftp:
         print("Connection succesfully stablished ... ")
+        sftp.p
         directory_structure = sftp.listdir_attr()
         for attr in directory_structure:
             dir_contents.append([attr.filename, attr])
