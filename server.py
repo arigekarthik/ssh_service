@@ -24,6 +24,8 @@ CORS(app)
 def upload_to_remote():
     print("hit route ", request.form, request.args, request.files)
     f = request.files['file']
+    with open(f, "r") as text_file:
+        print(text_file)
     f.save(f.filename)
     sftp_conn = create_sftp_connection()
     localFilePath = f"./{f.filename}"
