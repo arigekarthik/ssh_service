@@ -25,7 +25,7 @@ def upload_to_remote():
     print("hit route ", request.form, request.args, request.files)
     f = request.files['file']
     f.save(f.filename)
-    file = open(f, "r")
+    file = open(f.filename, "r")
     for x in file:
         print(x)
     sftp_conn = create_sftp_connection()
