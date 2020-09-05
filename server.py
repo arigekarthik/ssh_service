@@ -20,9 +20,9 @@ def list_remote_dir():
     )
     return response
 
-@app.route('/upload', methods = ['PUT'])
+@app.route('/upload', methods = ['POST'])
 def upload_to_remote():
-    print("hit route ",request)
+    print("hit route ", request.form, request.args, request.files)
     f = request.files['file']
     f.save(f.filename)
     sftp_conn = create_sftp_connection()
