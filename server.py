@@ -25,7 +25,7 @@ def connect_and_list():
         directory_structure = sftp.listdir_attr()
         for attr in directory_structure:
             dir_contents.append([attr.filename, attr])
-    return dir_contents
+    return str(dir_contents)
 
 if __name__ == '__main__':
     app.run(port=5000)
