@@ -40,6 +40,7 @@ def upload_to_remote():
 @app.route('/upload_from_string', methods = ['POST'])
 def upload_to_remote_v2():
     body = request.get_json()
+    print(body)
     with open("sftp_out.txt", "w") as text_file:
         text_file.write(body['file'])
     sftp_conn = create_sftp_connection()
