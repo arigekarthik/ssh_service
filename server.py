@@ -1,18 +1,31 @@
 import pysftp
+from flask import Flask, json
+from flask_cors import CORS
+app = Flask(__name__)
+CORS(app)
 
-myHostname = "test.rebex.net"
-myUsername = "demo"
-myPassword = "password"
-cnopts = pysftp.CnOpts()
-cnopts.hostkeys = None
+@app.route('/list_dir', methods=['GET'])
+def list_remote_dir():
+    response = app.response_class(
+        response=json.dumps(connect_and_list()),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
 
-with pysftp.Connection(host=myHostname, username=myUsername, password=myPassword, cnopts=cnopts) as sftp:
-    print("Connection succesfully stablished ... ")
-    # Switch to a remote directory
-    # sftp.cwd('/var/www/vhosts/')
-    # Obtain structure of the remote directory '/var/www/vhosts'
-    directory_structure = sftp.listdir_attr()
-    # Print data
-    for attr in directory_structure:
-        print(attr.filename, attr)
-# connection closed automatically at the end of the with statement
+def connect_and_list():
+    myHostname = "test.rebex.net"
+    myUsername = "demo"
+    myPassword = "password"
+    cnopts = pysftp.CnOpts()
+    cnopts.hostkeys = None
+    dir_contents = []
+    with pysftp.Connection(host=myHostname, username=myUsername, password=myPassword, cnopts=cnopts) as sftp:
+        print("Connection succesfully stablished ... ")
+        directory_structure = sftp.listdir_attr()
+        for attr in directory_structure:
+            dir_contents.push([attr.filename, attr])
+    return dir_contents
+
+if __name__ == '__main__':
+    app.run(port=5000)
