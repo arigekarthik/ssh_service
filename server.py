@@ -24,7 +24,7 @@ def connect_and_list():
         print("Connection succesfully stablished ... ")
         directory_structure = sftp.listdir_attr()
         for attr in directory_structure:
-            dir_contents.push([attr.filename, attr])
+            dir_contents.append([attr.filename, attr])
     return dir_contents
 
 if __name__ == '__main__':
