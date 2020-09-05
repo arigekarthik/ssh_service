@@ -1,5 +1,5 @@
 import pysftp
-from flask import Flask, json
+from flask import Flask, request, json
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
@@ -8,6 +8,17 @@ CORS(app)
 def list_remote_dir():
     response = app.response_class(
         response=json.dumps(connect_and_list()),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
+
+@app.route('/upload', methods = ['POST'])
+def upload_to_remote():
+    f = request.files['file']
+    print(f)
+    response = app.response_class(
+        response=json.dumps({}),
         status=200,
         mimetype='application/json'
     )
