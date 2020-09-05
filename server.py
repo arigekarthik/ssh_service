@@ -5,20 +5,20 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/list_dir', methods=['GET'])
-def list_remote_dir():
-    sftp_conn = create_sftp_connection()
-    directory_structure = sftp_conn.listdir_attr()
-    dir_contents = []
-    for attr in directory_structure:
-        dir_contents.append([attr.filename, attr])
-    sftp_conn.close()
-    response = app.response_class(
-        response=json.dumps(str(dir_contents)),
-        status=200,
-        mimetype='application/json'
-    )
-    return response
+# @app.route('/list_dir', methods=['GET'])
+# def list_remote_dir():
+#     sftp_conn = create_sftp_connection()
+#     directory_structure = sftp_conn.listdir_attr()
+#     dir_contents = []
+#     for attr in directory_structure:
+#         dir_contents.append([attr.filename, attr])
+#     sftp_conn.close()
+#     response = app.response_class(
+#         response=json.dumps(str(dir_contents)),
+#         status=200,
+#         mimetype='application/json'
+#     )
+#     return response
 
 @app.route('/upload', methods = ['POST'])
 def upload_to_remote():
@@ -31,7 +31,7 @@ def upload_to_remote():
     print(os.listdir('.'), localFilePath, remoteFilePath)
     sftp_conn.put(localFilePath, remoteFilePath)
     sftp_conn.close()
-    os.remove(f.filename)
+    # os.remove(f.filename)
     response = app.response_class(
         response=json.dumps({}),
         status=200,
