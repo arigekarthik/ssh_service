@@ -20,7 +20,7 @@ def list_remote_dir():
     )
     return response
 
-@app.route('/upload', methods = ['POST'])
+@app.route('/upload', methods = ['PUT'])
 def upload_to_remote():
     f = request.files['file']
     f.save(f.filename)
@@ -30,6 +30,7 @@ def upload_to_remote():
     print(os.listdir('.'), localFilePath, remoteFilePath)
     sftp_conn.put(localFilePath, remoteFilePath)
     sftp_conn.close()
+    os.remove(f.filename)
     response = app.response_class(
         response=json.dumps({}),
         status=200,
